@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>汉博格啤酒商城</title>
+  <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body>
+
+
+  <script>
+    (async function () {
+
+      const mobile_list_json2 = '{"12":{"id":"12","name":"\u5176\u4ed6","data":[{"id":"18","title":"\u5357\u5b81","data":{"result":[{"\u5174\u5b81\u533a":"13768519241"},{"\u864e\u4e18\u4e00\u91cc":"15878196526"},{"\u5317\u6e56\u8def":"17774804667"}]},"ccate":"12"},{"id":"19","title":"\u67f3\u5dde","data":{"result":[{"\u67f3\u5dde":"15307726977"}]},"ccate":"12"},{"id":"20","title":"\u4e0a\u6797","data":{"result":[{"\u4e0a\u6797":"18174114656"}]},"ccate":"12"},{"id":"21","title":"\u6765\u5bbe","data":{"result":[{"\u6765\u5bbe":"18172431155"}]},"ccate":"12"},{"id":"22","title":"\u8d35\u6e2f","data":{"result":[{"\u8d35\u6e2f":"13557257645"}]},"ccate":"12"},{"id":"23","title":"\u6cb3\u6c60","data":{"result":[{"\u7f57\u57ce":"19178812085"}]},"ccate":"12"},{"id":"24","title":"\u94a6\u5dde","data":{"result":[{"\u94a6\u5dde":"15677763678"}]},"ccate":"12"},{"id":"25","title":"\u5176\u4ed6","data":{"result":[{"\u5ba2\u670d1":"17774804667"},{"\u5ba2\u670d2":"18677091155"}]},"ccate":"12"}]},"4":{"id":"4","name":"\u5357\u5b81","data":[{"id":"15","title":"\u5174\u5b81\u533a","data":{"result":[{"\u5174\u5b81\u533a":"13768519241"},{"\u864e\u4e18\u4e00\u91cc":"15878196526"}]},"ccate":"4"},{"id":"14","title":"\u897f\u4e61\u5858\u533a","data":{"result":[{"\u5317\u6e56\u8def":"17774804667"}]},"ccate":"4"},{"id":"16","title":"\u6c5f\u5357\u533a","data":{"result":[{"\u6c5f\u5357\u533a":"18607718616"}]},"ccate":"4"}]},"11":{"id":"11","name":"\u94a6\u5dde","data":[{"id":"13","title":"\u94a6\u5dde\u5e02","data":{"result":[{"\u94a6\u5dde\u5e02":"15677763678"}]},"ccate":"11"}]},"6":{"id":"6","name":"\u67f3\u5dde","data":[{"id":"9","title":"\u67f3\u5dde\u5e02","data":{"result":[{"\u67f3\u5dde\u5e02":"15307726977"}]},"ccate":"6"},{"id":"17","title":"\u878d\u5b89","data":{"result":[{"\u878d\u5b89":"18977255098"}]},"ccate":"6"}]},"7":{"id":"7","name":"\u4e0a\u6797","data":[{"id":"10","title":"\u4e0a\u6797\u5e02","data":{"result":[{"\u4e0a\u6797\u5e02":"18174114656"}]},"ccate":"7"}]},"8":{"id":"8","name":"\u6765\u5bbe","data":[{"id":"11","title":"\u6765\u5bbe\u5e02","data":{"result":[{"\u6765\u5bbe\u5e02":"18172431155"}]},"ccate":"8"}]},"9":{"id":"9","name":"\u8d35\u6e2f","data":[{"id":"8","title":"\u8d35\u6e2f\u5e02","data":{"result":[{"\u8d35\u6e2f\u5e02":"13557257645"}]},"ccate":"9"}]},"10":{"id":"10","name":"\u6cb3\u6c60","data":[{"id":"12","title":"\u6cb3\u6c60","data":{"result":[{"\u7f57\u57ce":"19178812085"}]},"ccate":"10"}]}}';
+
+      // 初始化数据
+      const initList = await eval("(" + mobile_list_json2 + ")");
+
+      // 初始化骨架
+      (function () {
+
+        const outerDiv = document.createElement('div');
+        outerDiv.classList.add('outerDiv');
+
+        const header = document.createElement('div');
+        header.classList.add('header');
+
+        const headerDiv1 = document.createElement('div');
+        headerDiv1.innerHTML = `<svg t="1689147599018" class="icon0" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            p-id="2723" width="32" height="32">
+            <path d="M512 610.88L930.88 192 1024 285.12l-512 512-512-512L93.12 192z" fill="#777272" p-id="2724">
+            </path>
+          </svg>`
+        const headerDiv2 = document.createElement('div');
+        headerDiv2.textContent = '各地配送中心电话';
+        header.appendChild(headerDiv1);
+        header.appendChild(headerDiv2);
+
+        const headerBtnDiv = document.createElement('div');
+        headerBtnDiv.classList.add('headerBtnDiv');
+
+        const pDiv = document.createElement('div');
+        pDiv.classList.add('pDiv');
+        const pDiv_p = document.createElement('p');
+        pDiv_p.textContent = '如需要配送请拨打当地配送电话，部分地区暂时不支持配送。其他疑问，请致电客服。';
+        pDiv.appendChild(pDiv_p);
+
+        const title = document.createElement('h3');
+        title.textContent = '其他配送中心的电话';
+        title.classList.add('title');
+
+        const hr = document.createElement('hr');
+
+        const addressListDiv = document.createElement('div');
+        addressListDiv.classList.add('addressListDiv');
+
+        const bottomDiv = document.createElement('div');
+        bottomDiv.classList.add('bottom');
+        bottomDiv.textContent = '返回'
+
+        outerDiv.appendChild(header);
+        outerDiv.appendChild(headerBtnDiv);
+        outerDiv.appendChild(pDiv);
+        outerDiv.appendChild(title);
+        outerDiv.appendChild(hr);
+        outerDiv.appendChild(addressListDiv);
+        outerDiv.appendChild(bottomDiv);
+
+        document.body.appendChild(outerDiv);
+
+      })();
+
+
+      // 渲染按钮
+      const headerBtnDiv = document.querySelector('.headerBtnDiv')
+      function renderBtn() {
+        let flag = true;
+        for (const item in initList) {
+          const newBtn = document.createElement('button')
+          newBtn.innerHTML = initList[item].name
+          newBtn.classList.add('changeBtn')
+          flag && newBtn.classList.add('btnActive')
+          flag && changeTitle(initList[item].name)
+          flag && renderList(initList[item])
+          headerBtnDiv.appendChild(newBtn)
+          flag = false
+        }
+      }
+
+      // 修改title内容
+      const title = document.querySelector('.title')
+      function changeTitle(params) {
+        title.textContent = `${params}配送中心的电话`
+      }
+
+
+      // 渲染选中列表
+      const addressListDiv = document.querySelector('.addressListDiv');
+      function renderList(data) {
+        // 创建根节点
+        const outerul = document.createElement('ul');
+        for (const iterator of data.data) {
+          // 获取数据
+          const arr = iterator.data.result
+          // 创建 第一段 DOMs
+          const outerLi = document.createElement('li');
+
+          const div0 = document.createElement('div');
+          div0.dataset.name = iterator.title
+          div0.classList.add('mask');
+
+          const div1 = document.createElement('div');
+          div1.classList.add('thisTitle');
+
+          const span1_1 = document.createElement('span');
+          span1_1.textContent = iterator.title;
+          span1_1.classList.add('addressName');
+          const span1_2 = document.createElement('span');
+          span1_2.innerHTML = `<svg t="1689147599018" class="icon" viewBox="0 0 1024 1024" version="1.1"
+            xmlns="http://www.w3.org/2000/svg" p-id="2723" width="32" height="32">
+            <path d="M512 610.88L930.88 192 1024 285.12l-512 512-512-512L93.12 192z" fill="#777272" p-id="2724">
+            </path>
+          </svg>`;
+
+          // 向第一段DOM添加子元素
+          div1.appendChild(span1_1);
+          div1.appendChild(span1_2);
+          outerLi.appendChild(div0);
+          outerLi.appendChild(div1);
+
+
+          // 创建 第二段 DOMs
+          const div2 = document.createElement('div');
+          div2.classList.add('thisContenxt')
+
+          const ul2 = document.createElement('ul');
+
+          for (const item of arr) {
+            console.log('遍历了，累死了');
+            const [name] = Object.keys(item)
+
+            const optionLi = document.createElement('li');
+
+            const optionDiv1 = document.createElement('div');
+
+            const optionSpan1_1 = document.createElement('span');
+            optionSpan1_1.textContent = name;
+
+            optionDiv1.appendChild(optionSpan1_1)
+            optionLi.appendChild(optionDiv1)
+
+
+            // ------------------------ 画个分割线，看着眼花 -------------------------
+            const optionDiv2 = document.createElement('div');
+
+            const optionSpan2_1 = document.createElement('span');
+            optionSpan2_1.textContent = item[name];
+
+            const optionSpan2_2 = document.createElement('span');
+            optionSpan2_2.classList.add('no2')
+
+            const optionBtn2_1 = document.createElement('button');
+            optionBtn2_1.dataset.value = `${name}-${item[name]}`
+            optionBtn2_1.textContent = '拨打';
+            optionBtn2_1.classList.add('ring_up')
+
+            optionSpan2_2.appendChild(optionBtn2_1);
+            optionDiv2.appendChild(optionSpan2_1);
+            optionDiv2.appendChild(optionSpan2_2);
+            optionLi.appendChild(optionDiv2)
+            ul2.appendChild(optionLi)
+          }
+          div2.appendChild(ul2)
+          outerLi.appendChild(div2)
+          outerul.appendChild(outerLi);
+
+
+
+        }
+
+        addressListDiv.appendChild(outerul);
+      }
+
+      // 列表点击事件
+      const mask = document.getElementsByClassName('mask')
+      const thisTitle = document.querySelectorAll('.thisTitle')
+      const thisContenxt = document.getElementsByClassName('thisContenxt')
+      const ring_up = document.getElementsByClassName('ring_up')
+      const changeBtn = document.getElementsByClassName('changeBtn')
+      const icon = document.getElementsByClassName('icon')
+
+      document.addEventListener("click", function (e) {
+        // console.log(e.target);
+        // list点击
+        if ([...mask].indexOf(e.target) != -1) {
+          const index = [...mask].indexOf(e.target)
+          if (getComputedStyle(thisContenxt[index]).height == '0px') {
+            thisContenxt[index].classList.add('thisContenxtActive')
+            // 获取子数据长度
+            const dataLength = getLength(e.target, initList)
+            thisContenxt[index].style.height = `${25 * dataLength + ((dataLength + 1) * 20)}px`
+            icon[index].classList.add('changeDeg')
+          } else {
+            thisContenxt[index].style.height = `${0}px`
+            thisContenxt[index].classList.add('thisContenxtActive')
+            setTimeout(() => {
+              thisContenxt[index].classList.remove('thisContenxtActive')
+            }, 480)
+            icon[index].classList.remove('changeDeg')
+          }
+        }
+        // 拨打点击
+        if ([...ring_up].indexOf(e.target) != -1) {
+          const [targetName, phoneNum] = e.target.dataset.value.split(/-/)
+          const tip = confirm(`确定要给\n名字为 ${targetName} , \n号码为 ${phoneNum} \n的波打电话吗？`)
+          const use = /Windows/
+          !use.test(navigator.userAgent) ? window.location.href = `tel:${phoneNum}` : alert('请使用手机设备 点击 拨打')
+
+        }
+        // 按钮点击
+        if ([...changeBtn].indexOf(e.target) != -1) {
+          const oldBtn = document.querySelector('.headerBtnDiv button[class="changeBtn btnActive"]')
+          if (oldBtn.textContent != e.target.textContent) {
+            oldBtn.classList.remove('btnActive')
+            e.target.classList.add('btnActive')
+
+            // 更改title、重新渲染列表
+            changeTitle(e.target.textContent)
+            addressListDiv.textContent = ''
+            const name = e.target.textContent
+            const data = getdata(name, initList)
+            renderList(data)
+          }
+        }
+      })
+
+      // 工具方法
+      function getLength(elemet, params) {
+        for (const key in params) {
+          for (const iterator of params[key].data) {
+            if (elemet.dataset.name == iterator.title) return iterator.data.result.length
+          }
+        }
+      }
+      function getdata(name, params) {
+        for (const key in params) {
+          if (name == params[key].name) return params[key]
+        }
+      }
+
+      const icon0 = document.getElementsByClassName('icon0')[0]
+      const bottom = document.getElementsByClassName('bottom')[0]
+      function return_up_page() {
+        window.history.back()
+      }
+      icon0.addEventListener('click', return_up_page)
+      bottom.addEventListener('click', return_up_page)
+
+      // 执行初始化渲染程序
+      renderBtn()
+
+
+      // 监控页面变化
+      const listenerOuterDiv = document.querySelector('.outerDiv');
+      const bhOverflow = document.querySelector(':root')
+      // console.log(getComputedStyle(bhOverflow).getPropertyValue('--bhOverflow'));
+      listenerOuterDiv.removeAttribute('style')
+      if (window.outerWidth > 420) {
+        listenerOuterDiv.classList.add('outerDiv_window')
+        listenerOuterDiv.style.height = '705px'
+        bhOverflow.style.setProperty('--bhOverflow', 'hidden')
+      } else {
+        listenerOuterDiv.classList.remove('outerDiv_window')
+        if (window.outerWidth < 300) {
+          bhOverflow.style.setProperty('--bhOverflow', 'none')
+          setTimeout(() => listenerOuterDiv.style.width = '320px', 0)
+        }
+      }
+
+      window.onresize = function () {
+        listenerOuterDiv.removeAttribute('style')
+        if (window.outerWidth > 420) {
+          listenerOuterDiv.classList.add('outerDiv_window')
+          listenerOuterDiv.style.height = '705px'
+          bhOverflow.style.setProperty('--bhOverflow', 'hidden')
+        } else {
+          listenerOuterDiv.classList.remove('outerDiv_window')
+          if (window.outerWidth < 300) {
+            bhOverflow.style.setProperty('--bhOverflow', 'none')
+            setTimeout(() => listenerOuterDiv.style.width = '320px', 0)
+          }
+        }
+      }
+
+    })()
+
+  </script>
+
+</body>
+
+</html>
