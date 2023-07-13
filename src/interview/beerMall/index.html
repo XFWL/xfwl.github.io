@@ -219,7 +219,7 @@
           const [targetName, phoneNum] = e.target.dataset.value.split(/-/)
           const tip = confirm(`确定要给\n名字为 ${targetName} , \n号码为 ${phoneNum} \n的波打电话吗？`)
           const use = /Windows/
-          !use.test(navigator.userAgent) ? window.location.href = `tel:${phoneNum}` : alert('请使用手机设备 点击 拨打')
+          if (tip) !use.test(navigator.userAgent) ? window.location.href = `tel:${phoneNum}` : alert('请使用手机设备 点击 拨打')
 
         }
         // 按钮点击
