@@ -282,20 +282,29 @@
         }
       }
 
-      window.onresize = function () {
-        listenerOuterDiv.removeAttribute('style')
-        if (window.outerWidth > 420) {
-          listenerOuterDiv.classList.add('outerDiv_window')
-          listenerOuterDiv.style.height = '705px'
-          bhOverflow.style.setProperty('--bhOverflow', 'hidden')
-        } else {
-          listenerOuterDiv.classList.remove('outerDiv_window')
-          if (window.outerWidth < 300) {
-            bhOverflow.style.setProperty('--bhOverflow', 'none')
-            setTimeout(() => listenerOuterDiv.style.width = '320px', 0)
-          }
+      function fd() {
+        let flag;
+        return function () {
+          clearTimeout(flag)
+          flag = setTimeout(() => {
+            console.log(getComputedStyle(bhOverflow).getPropertyValue('--bhOverflow') == "none");
+            listenerOuterDiv.removeAttribute('style')
+            if (window.outerWidth > 420) {
+              listenerOuterDiv.classList.add('outerDiv_window')
+              listenerOuterDiv.style.height = '705px'
+              bhOverflow.style.setProperty('--bhOverflow', 'hidden')
+            } else {
+              listenerOuterDiv.classList.remove('outerDiv_window')
+              if (window.outerWidth < 300) {
+                bhOverflow.style.setProperty('--bhOverflow', 'none')
+                setTimeout(() => listenerOuterDiv.style.width = '320px', 0)
+              }
+            }
+          }, 100);
         }
       }
+
+      window.onresize = fd()
 
     })()
 
