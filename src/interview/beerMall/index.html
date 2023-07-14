@@ -219,7 +219,8 @@
           const [targetName, phoneNum] = e.target.dataset.value.split(/-/)
           const tip = confirm(`确定要给\n名字为 ${targetName} , \n号码为 ${phoneNum} \n的波打电话吗？`)
           const use = /Windows/
-          if (tip) !use.test(navigator.userAgent) ? window.location.href = `tel:${phoneNum}` : alert('请使用手机设备 点击 拨打')
+          console.log(tip);
+          tip && (!use.test(navigator.userAgent) ? window.location.href = `tel:${phoneNum}` : alert('请使用手机设备 点击 拨打'))
 
         }
         // 按钮点击
@@ -268,26 +269,14 @@
       // 监控页面变化
       const listenerOuterDiv = document.querySelector('.outerDiv');
       const bhOverflow = document.querySelector(':root')
-      // console.log(getComputedStyle(bhOverflow).getPropertyValue('--bhOverflow'));
-      listenerOuterDiv.removeAttribute('style')
-      if (window.outerWidth > 420) {
-        listenerOuterDiv.classList.add('outerDiv_window')
-        listenerOuterDiv.style.height = '705px'
-        bhOverflow.style.setProperty('--bhOverflow', 'hidden')
-      } else {
-        listenerOuterDiv.classList.remove('outerDiv_window')
-        if (window.outerWidth < 300) {
-          bhOverflow.style.setProperty('--bhOverflow', 'none')
-          setTimeout(() => listenerOuterDiv.style.width = '320px', 0)
-        }
-      }
 
-      function fd() {
+
+      function fd(time = 100) {
         let flag;
         return function () {
           clearTimeout(flag)
           flag = setTimeout(() => {
-            console.log(getComputedStyle(bhOverflow).getPropertyValue('--bhOverflow') == "none");
+            // console.log(getComputedStyle(bhOverflow).getPropertyValue('--bhOverflow') == "none");
             listenerOuterDiv.removeAttribute('style')
             if (window.outerWidth > 420) {
               listenerOuterDiv.classList.add('outerDiv_window')
@@ -300,10 +289,10 @@
                 setTimeout(() => listenerOuterDiv.style.width = '320px', 0)
               }
             }
-          }, 100);
+          }, time);
         }
       }
-
+      fd(0)()
       window.onresize = fd()
 
     })()
