@@ -154,13 +154,13 @@
   </div>
 
   <script>
-    const data = getStorage('info') ? getStorage('info') : [
+    const data = getStorage() ? getStorage() : [
       {
         access: '137',
         apps: [
           {
             appName: '抖音-极速',
-            ratio: 1000,
+            ratio: 10000,
             items: [
               { itemName: '签到', number: [], isFulfilled: false },
               { itemName: '预约', number: [], isFulfilled: false },
@@ -173,7 +173,7 @@
           },
           {
             appName: '快手-极速',
-            ratio: 1000,
+            ratio: 10000,
             items: [
               { itemName: '签到', number: [], isFulfilled: false },
               { itemName: '预约', number: [], isFulfilled: false },
@@ -186,7 +186,7 @@
           },
           {
             appName: '番茄免费小说',
-            ratio: 3300,
+            ratio: 33000,
             items: [
               { itemName: '签到', number: [], isFulfilled: false },
               { itemName: '读小说', number: [], isFulfilled: false },
@@ -199,7 +199,7 @@
           },
           {
             appName: '番茄畅听',
-            ratio: 3300,
+            ratio: 33000,
             items: [
               { itemName: '签到', number: [], isFulfilled: false },
               { itemName: '读小说', number: [], isFulfilled: false },
@@ -212,7 +212,7 @@
           },
           {
             appName: '头条-极速',
-            ratio: 3300,
+            ratio: 33000,
             items: [
               { itemName: '签到', number: [], isFulfilled: false },
               { itemName: '阅读（短视频）', number: [], isFulfilled: false },
@@ -230,7 +230,7 @@
         apps: [
           {
             appName: '抖音-极速',
-            ratio: 1000,
+            ratio: 10000,
             items: [
               { itemName: '签到', number: [], isFulfilled: false },
               { itemName: '预约', number: [], isFulfilled: false },
@@ -243,7 +243,7 @@
           },
           {
             appName: '快手-极速',
-            ratio: 1000,
+            ratio: 10000,
             items: [
               { itemName: '签到', number: [], isFulfilled: false },
               { itemName: '预约', number: [], isFulfilled: false },
@@ -255,7 +255,7 @@
           },
           {
             appName: '番茄免费小说',
-            ratio: 3300,
+            ratio: 33000,
             items: [
               { itemName: '签到', number: [], isFulfilled: false },
               { itemName: '读小说', number: [], isFulfilled: false },
@@ -268,7 +268,7 @@
           },
           {
             appName: '番茄畅听',
-            ratio: 3300,
+            ratio: 33000,
             items: [
               { itemName: '签到', number: [], isFulfilled: false },
               { itemName: '读小说', number: [], isFulfilled: false },
@@ -290,7 +290,7 @@
 
     resizeBtn.onclick = async function () {
       await resizeCheckbox(data)()
-      setStorage('info', data)
+      setStorage(data)
       render2(table, data)
     }
 
@@ -330,7 +330,7 @@
           let targetObj = totalAccess.items.filter(el => el.ratio == ratio)
           // 三元运算符获取对应比例的对象
           targetObj = targetObj.length === 0 ?
-            totalAccess.items[totalAccess.items.push({ ratio, total: 0 }) - 1] :
+            totalAccess.items[totalAccess.items.push({ ratio, total: 0, money: 0 }) - 1] :
             targetObj[0]
 
           const appTr = document.createElement('tr')
@@ -390,7 +390,7 @@
               number[i] === undefined && (number[i] = '')
               // 输入框的字符串
               const currentNum2 = typeof number[i] === 'number' || typeof number[i] === 'string' || !number[i] ? number[i] : number[i].join()
-              const currentNumTitle = currentNum ? (currentNum / (+ratio)).toFixed(3) : 0
+              const currentNumTitle = currentNum ? myToFixed(currentNum / (+ratio)) : 0
               // 金额列
               const numberTd = document.createElement('td')
               numberTd.classList.add('number')
@@ -414,6 +414,7 @@
 
             }
 
+            if (itemName === '现金') targetObj.money += number[number.length - 1] ? +number[number.length - 1] : 0
             if (itemName === '总数') targetObj.total += number[number.length - 1] ? +number[number.length - 1] : 0
 
             if (itemIndex !== arr.length - 1) {
@@ -473,7 +474,7 @@
       const moneyBox = document.createElement("div")
       moneyBox.classList.add('moneyBox')
       moneyBox.setAttribute('title', money.info)
-      moneyBox.textContent = `今日人民币：${money.total}`
+      moneyBox.textContent = `今日人民币：${myToFixed(money.total)}`
 
       // 添加总数box
       totalBox.insertAdjacentElement("beforeend", speciesBox)
@@ -503,12 +504,11 @@
     // 添加列数据
     function addNumber(params) {
       return function () {
-        // console.log(params);
-        let flag = +prompt('asd');
+        let flag = +prompt(`你确定要给 ${params.itemName} 添加一列新数据吗？`);
         if (!flag) return
         if (!(/^[\d.]+$/.test(flag))) return alert('输入数字！？！')
         params.number.push(flag)
-        setStorage('info', data)
+        setStorage(data)
         render2(table, data)
       }
     }
@@ -532,7 +532,7 @@
         } else {
           arr[index][key] = oldEl.value
         }
-        setStorage('info', data)
+        setStorage(data)
         render2(table, data)
       }
     }
@@ -560,7 +560,7 @@
         clearTimeout(flag)
         row.isFulfilled = e.target.checked
         flag = setTimeout(() => {
-          setStorage('info', data)
+          setStorage(data)
           render2(table, data)
         }, 300);
       }
@@ -602,22 +602,27 @@
       let species = 0
       data.forEach((el, index, arr) => {
         const { access, items } = el
+        // 合计现金红包
+        let money = 0
         // 映射各个用户信息
         container.get(access) === undefined && container.set(access, { speciesTotal: 0, speciesInfo: '', moneyTotal: 0, moneyInfo: '' })
         const current = container.get(access)
         // 凭借整合数据
         items.forEach((itemsEl, index, arr) => {
-          const moneyNum = +(itemsEl.total / +itemsEl.ratio).toFixed(4)
+          money += itemsEl.money
+          const moneyNum = +myToFixed(+(itemsEl.total / +itemsEl.ratio))
+          // 数字汇总
           current.speciesTotal += itemsEl.total
-          current.speciesInfo += `${itemsEl.total}/${itemsEl.ratio}`
           current.moneyTotal += moneyNum
-          current.moneyInfo += `${moneyNum}/${itemsEl.ratio}`
+          // 信息汇总
+          current.speciesInfo += `${itemsEl.total}/${itemsEl.ratio}`
+          current.moneyInfo += `${moneyNum}/${itemsEl.money}/${itemsEl.ratio}`
           if (arr.length - 1 == index) return
           current.speciesInfo += ' - '
           current.moneyInfo += ' - '
         })
-        current.speciesInfo = `${access}：${current.speciesTotal} (${current.speciesInfo})`
-        current.moneyInfo = `${access}：${current.moneyTotal} (${current.moneyInfo})`
+        current.speciesInfo = `${access}：${current.speciesTotal}   (${current.speciesInfo})`
+        current.moneyInfo = `${access}：${myToFixed(current.moneyTotal + money)}   ( ${myToFixed(money)} ) (${current.moneyInfo})`
       })
       const result = []
       const resultTotalKey = ['speciesTotal', 'moneyTotal']
@@ -634,13 +639,19 @@
       return result
     }
 
+    function myToFixed(number) {
+
+      console.log(number);
+      return number.toFixed(3)
+    }
+
     // 数据存本地
-    function setStorage(key, value) {
-      localStorage.setItem(key, JSON.stringify(value))
+    function setStorage(value) {
+      localStorage.setItem('info', JSON.stringify(value))
     }
     // 数据取本地
-    function getStorage(key) {
-      return JSON.parse(localStorage.getItem(key))
+    function getStorage() {
+      return JSON.parse(localStorage.getItem('info'))
     }
   </script>
 </body>
