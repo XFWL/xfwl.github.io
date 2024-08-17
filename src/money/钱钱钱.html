@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>钱钱钱</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  .table-layout {
+    position: relative;
+    width: 1000px;
+    height: 800px;
+    overflow: auto;
+    margin: 50px auto;
+    resize: both;
+  }
+
+  table {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+
+  table td {
+    border: 1px solid black;
+  }
+
+  table td {
+    width: 100px;
+    text-align: center;
+  }
+
+
+  td.number {
+    position: relative;
+    min-width: 50px;
+    height: 30px;
+    line-height: 30px;
+  }
+
+  td.fontColor {
+    font-weight: bolder;
+    color: red;
+  }
+
+  .numberDiv {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .numberInput {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+  }
+
+  table .stickyBox {
+    min-width: 100px;
+    position: sticky;
+    z-index: 8888;
+  }
+
+  table .sticky1 {
+    background-color: rgb(236, 236, 236);
+    left: 0;
+  }
+
+  table .sticky2 {
+    background-color: rgb(255, 197, 197);
+    left: 100px;
+    min-width: 100px;
+  }
+
+  table .sticky3 {
+    background-color: rgb(230, 230, 230);
+    left: 200px;
+  }
+
+  table .btn {
+    min-width: 200px;
+    position: sticky;
+    background-color: rgb(219, 219, 172);
+    z-index: 8888;
+    box-sizing: border-box;
+    right: 0;
+  }
+
+  .isNone {
+    display: none;
+  }
+
+  .headerDiv {
+    background-color: antiquewhite;
+    position: sticky;
+    left: 0;
+    top: 0;
+    z-index: 222222;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .totalBox {
+    display: flex;
+  }
+
+  .totalBox>* {
+    margin-right: 20px;
+  }
+</style>
+
+<body>
+
+  <div class="table-layout">
+    <div class="headerDiv">
+      <button class="resizeBtn">重置所有选框</button>
+      <div class="totalBox">
+        <div class="speciesBox"></div>
+        <div class="moneyBox"></div>
+      </div>
+    </div>
+    <table>
+
+
+      <!-- <tbody id="layout">
+      <tr>
+        <td rowspan="15">135</td>
+      </tr>
+      <tr>
+        <td rowspan="3">kait</td>
+      </tr>
+      <tr>
+        <td>看视频</td>
+        <td>222</td>
+        <td>222</td>
+        <td>222</td>
+      </tr>
+      <tr>
+        <td>读小说</td>
+        <td>222</td>
+        <td>222</td>
+        <td>222</td>
+      </tr>
+    </tbody> -->
+
+
+    </table>
+  </div>
+
+  <script>
+    const data = getStorage('info') ? getStorage('info') : [
+      {
+        access: '137',
+        apps: [
+          {
+            appName: '抖音-极速',
+            ratio: 1000,
+            items: [
+              { itemName: '签到', number: [], isFulfilled: false },
+              { itemName: '预约', number: [], isFulfilled: false },
+              { itemName: '开盒子', number: [], isFulfilled: false },
+              { itemName: '看视频', number: [], isFulfilled: false },
+              { itemName: '其他', number: [], isFulfilled: false },
+              { itemName: '现金', number: [], isFulfilled: false },
+              { itemName: '总数', number: [], isFulfilled: false }
+            ]
+          },
+          {
+            appName: '快手-极速',
+            ratio: 1000,
+            items: [
+              { itemName: '签到', number: [], isFulfilled: false },
+              { itemName: '预约', number: [], isFulfilled: false },
+              { itemName: '开盒子', number: [], isFulfilled: false },
+              { itemName: '看视频', number: [], isFulfilled: false },
+              { itemName: '瓜分10w', number: [], isFulfilled: false },
+              { itemName: '其他', number: [], isFulfilled: false },
+              { itemName: '总数', number: [], isFulfilled: false }
+            ]
+          },
+          {
+            appName: '番茄免费小说',
+            ratio: 3300,
+            items: [
+              { itemName: '签到', number: [], isFulfilled: false },
+              { itemName: '读小说', number: [], isFulfilled: false },
+              { itemName: '听小说', number: [], isFulfilled: false },
+              { itemName: '看短剧', number: [], isFulfilled: false },
+              { itemName: '开盒子', number: [], isFulfilled: false },
+              { itemName: '其他', number: [], isFulfilled: false },
+              { itemName: '总数', number: [], isFulfilled: false }
+            ]
+          },
+          {
+            appName: '番茄畅听',
+            ratio: 3300,
+            items: [
+              { itemName: '签到', number: [], isFulfilled: false },
+              { itemName: '读小说', number: [], isFulfilled: false },
+              { itemName: '听小说', number: [], isFulfilled: false },
+              { itemName: '开盒子', number: [], isFulfilled: false },
+              { itemName: '其他', number: [], isFulfilled: false },
+              { itemName: '现金', number: [], isFulfilled: false },
+              { itemName: '总数', number: [], isFulfilled: false }
+            ]
+          },
+          {
+            appName: '头条-极速',
+            ratio: 3300,
+            items: [
+              { itemName: '签到', number: [], isFulfilled: false },
+              { itemName: '阅读（短视频）', number: [], isFulfilled: false },
+              { itemName: '看文章或视频（短视频）', number: [], isFulfilled: false },
+              { itemName: '开盒子', number: [], isFulfilled: false },
+              { itemName: '其他', number: [], isFulfilled: false },
+              { itemName: '现金', number: [], isFulfilled: false },
+              { itemName: '总数', number: [], isFulfilled: false }
+            ]
+          }
+        ]
+      },
+      {
+        access: '151',
+        apps: [
+          {
+            appName: '抖音-极速',
+            ratio: 1000,
+            items: [
+              { itemName: '签到', number: [], isFulfilled: false },
+              { itemName: '预约', number: [], isFulfilled: false },
+              { itemName: '开盒子', number: [], isFulfilled: false },
+              { itemName: '看视频', number: [], isFulfilled: false },
+              { itemName: '其他', number: [], isFulfilled: false },
+              { itemName: '现金', number: [], isFulfilled: false },
+              { itemName: '总数', number: [], isFulfilled: false }
+            ]
+          },
+          {
+            appName: '快手-极速',
+            ratio: 1000,
+            items: [
+              { itemName: '签到', number: [], isFulfilled: false },
+              { itemName: '预约', number: [], isFulfilled: false },
+              { itemName: '开盒子', number: [], isFulfilled: false },
+              { itemName: '看视频', number: [], isFulfilled: false },
+              { itemName: '其他', number: [], isFulfilled: false },
+              { itemName: '总数', number: [], isFulfilled: false }
+            ]
+          },
+          {
+            appName: '番茄免费小说',
+            ratio: 3300,
+            items: [
+              { itemName: '签到', number: [], isFulfilled: false },
+              { itemName: '读小说', number: [], isFulfilled: false },
+              { itemName: '听小说', number: [], isFulfilled: false },
+              { itemName: '看短剧', number: [], isFulfilled: true },
+              { itemName: '开盒子', number: [], isFulfilled: false },
+              { itemName: '其他', number: [], isFulfilled: false },
+              { itemName: '总数', number: [], isFulfilled: false }
+            ]
+          },
+          {
+            appName: '番茄畅听',
+            ratio: 3300,
+            items: [
+              { itemName: '签到', number: [], isFulfilled: false },
+              { itemName: '读小说', number: [], isFulfilled: false },
+              { itemName: '听小说', number: [], isFulfilled: false },
+              { itemName: '开盒子', number: [], isFulfilled: false },
+              { itemName: '其他', number: [], isFulfilled: false },
+              { itemName: '现金', number: [], isFulfilled: false },
+              { itemName: '总数', number: [], isFulfilled: false }
+            ]
+          }
+        ]
+      }
+    ]
+
+
+    const table = document.querySelector('table')
+    const resizeBtn = document.querySelector('.resizeBtn')
+    const totalBox = document.querySelector('.totalBox')
+
+    resizeBtn.onclick = async function () {
+      await resizeCheckbox(data)()
+      setStorage('info', data)
+      render2(table, data)
+    }
+
+    // 渲染函数
+    function render2(container, data) {
+      container.innerHTML = ``
+      // 各个比例的金币数据的汇总数组
+      const totalInfo = []
+      const maxNumber = getMaxLength(data)
+      data.forEach((el, elIndex) => {
+        const { access, apps } = el
+        const outerTby = document.createElement('tbody')
+        const accessTr = document.createElement('tr')
+        const accessTd = document.createElement('td')
+        accessTd.classList.add('stickyBox', 'sticky1', 'access')
+
+        accessTr.insertAdjacentElement("beforeend", accessTd)
+        outerTby.insertAdjacentElement("beforeend", accessTr)
+
+        // 用户对象，存金币、人民币总数
+        const totalAccess = {}
+        totalAccess.access = access
+        totalAccess.items = []
+        let maxRow = 1
+        accessTd.textContent = access
+
+        // 遍历app
+        apps.forEach((appEl, appIndex, appArr) => {
+          maxRow += 1
+          let appRow = 1
+
+          const { appName, ratio, items } = appEl
+
+          // 不同比例的对象
+          let targetObj = totalAccess.items.filter(el => el.ratio == ratio)
+          // 三元运算符获取对应比例的对象
+          targetObj = targetObj.length === 0 ?
+            totalAccess.items[totalAccess.items.push({ ratio, total: 0 }) - 1] :
+            targetObj[0]
+
+          const appTr = document.createElement('tr')
+          const appTd = document.createElement('td')
+          appTd.classList.add('stickyBox', 'sticky2', 'title')
+          // app名字div
+          const appDiv = document.createElement('div')
+          appDiv.textContent = appName
+          // app输入框div
+          const appInput = document.createElement('input')
+          appInput.classList.add("isNone")
+          appInput.value = appName
+          // app倍率div
+          const appRatioDiv = document.createElement('div')
+          appRatioDiv.textContent = ratio
+          // app输入框div
+          const appRatioInput = document.createElement('input')
+          appRatioInput.setAttribute("type", 'number')
+          appRatioInput.classList.add("isNone")
+          appRatioInput.value = ratio
+
+          // 切换输入
+          appDiv.ondblclick = divToInput(appDiv, appInput)
+          appInput.onblur = inputToDiv(appInput, appDiv, appArr, appIndex, 'appName')
+          appRatioDiv.ondblclick = divToInput(appRatioDiv, appRatioInput)
+          appRatioInput.onblur = inputToDiv(appRatioInput, appRatioDiv, appArr, appIndex, 'ratio')
+
+          // 加入app信息DOM
+          appTd.insertAdjacentElement('beforeend', appDiv)
+          appTd.insertAdjacentElement('beforeend', appInput)
+          appTd.insertAdjacentElement('beforeend', appRatioDiv)
+          appTd.insertAdjacentElement('beforeend', appRatioInput)
+          appTr.insertAdjacentElement('beforeend', appTd)
+          outerTby.insertAdjacentElement("beforeend", appTr)
+
+          // 遍历app的项目
+          items.forEach((itemEl, itemIndex, arr) => {
+            maxRow += 1
+            appRow += 1
+
+            const { itemName, number, isFulfilled } = itemEl
+            const itemTr = document.createElement('tr')
+            const itemTd = document.createElement('td')
+            // 写入项目名
+            itemTd.classList.add('stickyBox', 'sticky3', 'box')
+            itemTd.textContent = itemName
+            // 项目行 添加项目名称列
+            itemTr.insertAdjacentElement("beforeend", itemTd)
+
+            if (itemName === '总数') targetObj.total += +number[number.length - 1]
+
+            // 遍历app的项目的number中的记录
+            for (let i = 0; i < maxNumber; i++) {
+
+              // 计算后的number框的值
+              const currentNum = !(number[i] instanceof Array) ?
+                number[i] :
+                number[i].reduce((previous, current) => previous + (+current), 0)
+              number[i] === undefined && (number[i] = '')
+              // 输入框的字符串
+              const currentNum2 = typeof number[i] === 'number' || typeof number[i] === 'string' || !number[i] ? number[i] : number[i].join()
+              const currentNumTitle = (currentNum / (+ratio)).toFixed(3)
+              // 金额列
+              const numberTd = document.createElement('td')
+              numberTd.classList.add('number')
+              if (itemName === '总数') numberTd.classList.add('fontColor')
+              const numberDiv = document.createElement('div')
+              if (itemName !== '现金') numberDiv.setAttribute('title', `${currentNumTitle} 元`)
+              numberDiv.classList.add('numberDiv')
+              numberDiv.textContent = currentNum
+              const numberInput = document.createElement('input')
+              numberInput.classList.add('numberInput', "isNone")
+              numberInput.value = currentNum2
+
+              // 切换输入
+              numberDiv.ondblclick = divToInput(numberDiv, numberInput)
+              numberInput.onblur = inputToDiv(numberInput, numberDiv, number, i)
+
+              // 添加金币的记录到项目行里
+              numberTd.insertAdjacentElement("beforeend", numberDiv)
+              numberTd.insertAdjacentElement("beforeend", numberInput)
+              itemTr.insertAdjacentElement("beforeend", numberTd)
+
+            }
+
+            if (itemIndex !== arr.length - 1) {
+              // 最后的按钮td
+              const btnTb = document.createElement('td')
+              btnTb.classList.add('btn')
+              // 多选框
+              const checkboxBtn = document.createElement('input')
+              checkboxBtn.setAttribute('type', 'checkbox')
+              checkboxBtn.checked = itemEl.isFulfilled
+              checkboxBtn.setAttribute('id', `check-${elIndex}-${appIndex}-${itemIndex}`)
+              checkboxBtn.onclick = checkedFn(itemEl)
+              // 标签
+              const checkboxLabel = document.createElement('label')
+              checkboxLabel.setAttribute('for', `check-${elIndex}-${appIndex}-${itemIndex}`)
+              checkboxLabel.textContent = '完成  '
+              // 添加按钮
+              const addBtn = document.createElement('button')
+              addBtn.textContent = '添加列记录'
+              addBtn.onclick = addNumber(itemEl)
+
+
+              btnTb.insertAdjacentElement("beforeend", checkboxBtn)
+              btnTb.insertAdjacentElement("beforeend", checkboxLabel)
+              btnTb.insertAdjacentElement("beforeend", addBtn)
+
+
+              itemTr.insertAdjacentElement("beforeend", btnTb)
+            }
+
+            // ——————————————————————————————————————————————————————————————
+            // 添加按钮td到item行
+            outerTby.insertAdjacentElement("beforeend", itemTr)
+
+          });
+
+          appTd.setAttribute('rowspan', appRow)
+
+        });
+        // 各个比例的金币数据汇总
+        totalInfo.push(totalAccess)
+
+        // 添加整个tbody
+        accessTd.setAttribute('rowspan', maxRow)
+        container.insertAdjacentElement("beforeend", outerTby)
+      })
+
+      const [species, money] = process(totalInfo)
+
+
+      // 展示金币总数的box
+      const speciesBox = document.createElement("div")
+      speciesBox.classList.add('speciesBox')
+      speciesBox.setAttribute('title', species.info)
+      speciesBox.textContent = `今日金币：${species.total}`
+
+      // 展示人民币总数的box
+      const moneyBox = document.createElement("div")
+      moneyBox.classList.add('moneyBox')
+      moneyBox.setAttribute('title', money.info)
+      moneyBox.textContent = `今日人民币：${money.total}`
+
+      // 添加总数box
+      totalBox.insertAdjacentElement("beforeend", speciesBox)
+      totalBox.insertAdjacentElement("beforeend", moneyBox)
+
+    }
+
+    render2(table, data)
+
+
+    // 获取全部项目的个数
+    function getMaxLength(data) {
+      let maxLength = 0
+      data.forEach(element => {
+        const { apps } = element
+        apps.forEach(appsElement => {
+          const { items } = appsElement
+          items.forEach(itemIlement => {
+            const { number } = itemIlement
+            maxLength = maxLength < number.length ? number.length : maxLength
+          })
+        })
+      });
+      return maxLength
+    }
+
+    // 添加列数据
+    function addNumber(params) {
+      return function () {
+        // console.log(params);
+        let flag = +prompt('asd');
+        if (!flag) return
+        if (!(/^[\d.]+$/.test(flag))) return alert('输入数字！？！')
+        params.number.push(flag)
+        setStorage('info', data)
+        render2(table, data)
+      }
+    }
+
+    // 切换输入
+    function divToInput(oldEl, newEl) {
+      return function () {
+        oldEl.classList.add('isNone')
+        newEl.classList.remove('isNone')
+        newEl.focus()
+      }
+    }
+
+    // 切换查看
+    function inputToDiv(oldEl, newEl, arr, index, key = false) {
+      return function () {
+        oldEl.classList.add('isNone')
+        newEl.classList.remove('isNone')
+        if (!key) {
+          arr[index] = /[,，]+/.test(oldEl.value) ? oldEl.value.split(/[,，]/) : oldEl.value
+        } else {
+          arr[index][key] = oldEl.value
+        }
+        setStorage('info', data)
+        render2(table, data)
+      }
+    }
+
+    // 获取全部项目的个数
+    function getMaxLength(data) {
+      let maxLength = 0
+      data.forEach(element => {
+        const { apps } = element
+        apps.forEach(appsElement => {
+          const { items } = appsElement
+          items.forEach(itemIlement => {
+            const { number } = itemIlement
+            maxLength = maxLength < number.length ? number.length : maxLength
+          })
+        })
+      });
+      return maxLength
+    }
+
+    // 多选框（完成状态）切换
+    function checkedFn(row) {
+      let flag
+      return function (e) {
+        clearTimeout(flag)
+        row.isFulfilled = e.target.checked
+        flag = setTimeout(() => {
+          setStorage('info', data)
+          render2(table, data)
+        }, 300);
+      }
+    }
+
+    // 重置全部多选框
+    function resizeCheckbox(dataInfo) {
+      let flag = false
+      return function () {
+        for (const key in dataInfo) {
+          if (key === 'isFulfilled') {
+            dataInfo[key] = false
+            flag = true
+            continue
+          }
+          if (!(dataInfo[key] instanceof Object)) continue
+          resizeCheckbox(dataInfo[key])()
+        }
+      }
+    }
+
+    // 计算总金币和总人民币
+    /* 
+    [
+      {
+        speciesTotal: 556000,
+        speciesInfo: "137: 156465779687(12312333/10000 - 15646574/33000) \n
+            151: 156465779687(12312333/10000 - 15646574/33000)"
+      },
+      {
+        moneyTotal: 5.57,
+        moneyInfo: "137: 15.75(23/10000 - 3/33000) \n
+            151: 13.5(13/10000 - 4/33000)"
+      }
+    ]
+    */
+    function process(data) {
+      let container = new Map()
+      let species = 0
+
+      data.forEach((el, index, arr) => {
+        const { access, items } = el
+        // 映射各个用户信息
+        container.get(access) === undefined && container.set(access, { speciesTotal: 0, speciesInfo: '', moneyTotal: 0, moneyInfo: '' })
+        const current = container.get(access)
+        // 凭借整合数据
+        items.forEach((itemsEl, index, arr) => {
+          const moneyNum = +(itemsEl.total / +itemsEl.ratio).toFixed(4)
+          current.speciesTotal += itemsEl.total
+          current.speciesInfo += `${itemsEl.total}/${itemsEl.ratio}`
+          current.moneyTotal += moneyNum
+          current.moneyInfo += `${moneyNum}/${itemsEl.ratio}`
+          if (arr.length - 1 == index) return
+          current.speciesInfo += ' - '
+          current.moneyInfo += ' - '
+        })
+        current.speciesInfo = `${access}：${current.speciesTotal} (${current.speciesInfo})`
+        current.moneyInfo = `${access}：${current.moneyTotal} (${current.moneyInfo})`
+      })
+      const result = []
+      const resultTotalKey = ['speciesTotal', 'moneyTotal']
+      const resultInfoKey = ['speciesInfo', 'moneyInfo']
+      for (let i = 0; i < 2; i++) {
+        result[i] === undefined && (result[i] = {});
+        for (const iterator of container) {
+          result[i].total = result[i].total === undefined ? 0 : result[i].total;
+          result[i].info = result[i].info === undefined ? '' : result[i].info;
+          result[i].total += iterator[1][resultTotalKey[i]]
+          result[i].info += `${iterator[1][resultInfoKey[i]]}\n`
+        }
+      }
+      return result
+    }
+
+    // 数据存本地
+    function setStorage(key, value) {
+      localStorage.setItem(key, JSON.stringify(value))
+    }
+    // 数据取本地
+    function getStorage(key) {
+      return JSON.parse(localStorage.getItem(key))
+    }
+  </script>
+</body>
+
+</html>
