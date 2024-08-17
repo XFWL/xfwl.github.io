@@ -616,7 +616,7 @@
           current.moneyTotal += moneyNum
           // 信息汇总
           current.speciesInfo += `${itemsEl.total}/${itemsEl.ratio}`
-          current.moneyInfo += `${moneyNum}/${itemsEl.money}/${itemsEl.ratio}`
+          current.moneyInfo += `${moneyNum}/${myToFixed(itemsEl.money)} : ${itemsEl.ratio}`
           if (arr.length - 1 == index) return
           current.speciesInfo += ' - '
           current.moneyInfo += ' - '
