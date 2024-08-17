@@ -296,7 +296,9 @@
 
     // 渲染函数
     function render2(container, data) {
+      // 初始化
       container.innerHTML = ``
+      totalBox.innerHTML = ``
       // 各个比例的金币数据的汇总数组
       const totalInfo = []
       const maxNumber = getMaxLength(data)
@@ -378,8 +380,7 @@
             // 项目行 添加项目名称列
             itemTr.insertAdjacentElement("beforeend", itemTd)
 
-
-            if (itemName === '总数') targetObj.total += +number[number.length - 1] ? +number[number.length - 1] : 0
+            if (itemName === '总数') targetObj.total += +number[number.length - 1]
 
             // 遍历app的项目的number中的记录
             for (let i = 0; i < maxNumber; i++) {
@@ -391,7 +392,7 @@
               number[i] === undefined && (number[i] = '')
               // 输入框的字符串
               const currentNum2 = typeof number[i] === 'number' || typeof number[i] === 'string' || !number[i] ? number[i] : number[i].join()
-              const currentNumTitle = (currentNum / (+ratio)).toFixed(3)
+              const currentNumTitle = currentNum ? (currentNum / (+ratio)).toFixed(3) : 0
               // 金额列
               const numberTd = document.createElement('td')
               numberTd.classList.add('number')
@@ -461,6 +462,7 @@
       })
 
       const [species, money] = process(totalInfo)
+
 
       // 展示金币总数的box
       const speciesBox = document.createElement("div")
