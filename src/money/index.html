@@ -380,8 +380,6 @@
             // 项目行 添加项目名称列
             itemTr.insertAdjacentElement("beforeend", itemTd)
 
-            if (itemName === '总数') targetObj.total += +number[number.length - 1]
-
             // 遍历app的项目的number中的记录
             for (let i = 0; i < maxNumber; i++) {
 
@@ -414,6 +412,12 @@
               numberTd.insertAdjacentElement("beforeend", numberInput)
               itemTr.insertAdjacentElement("beforeend", numberTd)
 
+            }
+
+            if (itemName === '总数') {
+              console.log(number);
+              console.log(number[number.length - 1]);
+              targetObj.total += number[number.length - 1] ? +number[number.length - 1] : 0
             }
 
             if (itemIndex !== arr.length - 1) {
@@ -455,7 +459,6 @@
         });
         // 各个比例的金币数据汇总
         totalInfo.push(totalAccess)
-
         // 添加整个tbody
         accessTd.setAttribute('rowspan', maxRow)
         container.insertAdjacentElement("beforeend", outerTby)
@@ -601,7 +604,7 @@
     function process(data) {
       let container = new Map()
       let species = 0
-
+      console.log(data);
       data.forEach((el, index, arr) => {
         const { access, items } = el
         // 映射各个用户信息
