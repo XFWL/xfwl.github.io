@@ -414,11 +414,7 @@
 
             }
 
-            if (itemName === '总数') {
-              console.log(number);
-              console.log(number[number.length - 1]);
-              targetObj.total += number[number.length - 1] ? +number[number.length - 1] : 0
-            }
+            if (itemName === '总数') targetObj.total += number[number.length - 1] ? +number[number.length - 1] : 0
 
             if (itemIndex !== arr.length - 1) {
               // 最后的按钮td
