@@ -610,10 +610,10 @@
         // 凭借整合数据
         items.forEach((itemsEl, index, arr) => {
           money += itemsEl.money
-          const moneyNum = +myToFixed(+(itemsEl.total / +itemsEl.ratio))
+          const moneyNum = myToFixed(+(itemsEl.total / +itemsEl.ratio))
           // 数字汇总
           current.speciesTotal += itemsEl.total
-          current.moneyTotal += moneyNum
+          current.moneyTotal += moneyNum + myToFixed(itemsEl.money)
           // 信息汇总
           current.speciesInfo += `${itemsEl.total}/${itemsEl.ratio}`
           current.moneyInfo += `${moneyNum}/${myToFixed(itemsEl.money)} : ${itemsEl.ratio}`
@@ -621,8 +621,10 @@
           current.speciesInfo += ' - '
           current.moneyInfo += ' - '
         })
+
+        // 拼接数据
         current.speciesInfo = `${access}：${current.speciesTotal}   (${current.speciesInfo})`
-        current.moneyInfo = `${access}：${myToFixed(current.moneyTotal + money)}   ( ${myToFixed(money)} ) (${current.moneyInfo})`
+        current.moneyInfo = `${access}：${myToFixed(current.moneyTotal)}   ( ${myToFixed(money)} ) (${current.moneyInfo})`
       })
       const result = []
       const resultTotalKey = ['speciesTotal', 'moneyTotal']
@@ -640,9 +642,7 @@
     }
 
     function myToFixed(number) {
-
-      console.log(number);
-      return number.toFixed(3)
+      return +number.toFixed(3)
     }
 
     // 数据存本地
