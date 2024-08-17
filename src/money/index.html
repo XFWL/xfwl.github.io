@@ -396,7 +396,7 @@
               numberTd.classList.add('number')
               if (itemName === '总数') numberTd.classList.add('fontColor')
               const numberDiv = document.createElement('div')
-              if (itemName !== '现金') numberDiv.setAttribute('title', `${currentNumTitle} 元`)
+              if (itemName !== '现金') numberDiv.setAttribute('title', `≈ ${currentNumTitle} 元`)
               numberDiv.classList.add('numberDiv')
               numberDiv.textContent = currentNum
               const numberInput = document.createElement('input')
