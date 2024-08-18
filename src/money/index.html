@@ -415,7 +415,6 @@
             }
 
             if (itemName === '现金') {
-              console.log(typeof number[number.length - 1], number[number.length - 1]);
               targetObj.money += number[number.length - 1] instanceof Array ?
                 number[number.length - 1]?.reduce((per, current) => per + +current, 0) :
                 typeof number[number.length - 1] === "number" ?
