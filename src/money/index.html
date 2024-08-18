@@ -414,7 +414,14 @@
 
             }
 
-            if (itemName === '现金') targetObj.money += number[number.length - 1] ? +number[number.length - 1] : 0
+            if (itemName === '现金') {
+              console.log(typeof number[number.length - 1], number[number.length - 1]);
+              targetObj.money += number[number.length - 1] instanceof Array ?
+                number[number.length - 1]?.reduce((per, current) => per + +current, 0) :
+                typeof number[number.length - 1] === "number" ?
+                  number[number.length - 1] :
+                  +number[number.length - 1]
+            }
             if (itemName === '总数') targetObj.total += number[number.length - 1] ? +number[number.length - 1] : 0
 
             if (itemIndex !== arr.length - 1) {
@@ -527,8 +534,9 @@
       return function () {
         oldEl.classList.add('isNone')
         newEl.classList.remove('isNone')
+        const regExp1 = /[,，+]+/
         if (!key) {
-          arr[index] = /[,，]+/.test(oldEl.value) ? oldEl.value.split(/[,，]/) : oldEl.value
+          arr[index] = regExp1.test(oldEl.value) ? oldEl.value.split(regExp1) : oldEl.value
         } else {
           arr[index][key] = oldEl.value
         }
