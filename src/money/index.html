@@ -19,6 +19,7 @@
     overflow: auto;
     margin: 50px auto;
     resize: both;
+    scroll-behavior: smooth;
   }
 
   table {
@@ -39,7 +40,7 @@
 
   td.number {
     position: relative;
-    min-width: 50px;
+    min-width: 75px;
     height: 30px;
     line-height: 30px;
   }
@@ -284,6 +285,7 @@
     ]
 
 
+    const tableLayout = document.querySelector('.table-layout')
     const table = document.querySelector('table')
     const resizeBtn = document.querySelector('.resizeBtn')
     const totalBox = document.querySelector('.totalBox')
@@ -489,6 +491,8 @@
     }
 
     render2(table, data)
+
+    tableLayout.scrollLeft = tableLayout.scrollWidth
 
 
     // 获取全部项目的个数
