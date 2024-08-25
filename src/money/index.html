@@ -492,8 +492,7 @@
 
     render2(table, data)
 
-    tableLayout.scrollLeft = tableLayout.scrollWidth
-
+    toScrollEnd()()
 
     // 获取全部项目的个数
     function getMaxLength(data) {
@@ -520,6 +519,7 @@
         params.number.push(flag)
         setStorage(data)
         render2(table, data)
+        toScrollEnd()
       }
     }
 
@@ -664,6 +664,12 @@
     function getStorage() {
       return JSON.parse(localStorage.getItem('info'))
     }
+
+    // 滑动到滚动条末端
+    function toScrollEnd() {
+      tableLayout.scrollLeft = tableLayout.scrollWidth
+    }
+
   </script>
 </body>
 
