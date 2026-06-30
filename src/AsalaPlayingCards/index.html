@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>阿萨拉扑克牌收集</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: #fff;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .progress {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4ade80, #22c55e);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #eee;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 16px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .tab.active {
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 20%;
+      right: 20%;
+      height: 3px;
+      background: #667eea;
+      border-radius: 2px;
+    }
+
+    .card-list {
+      padding: 16px;
+      max-height: calc(100vh - 300px);
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .card-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 12px;
+      background: #f9fafb;
+      border-radius: 10px;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+      cursor: pointer;
+    }
+
+    .card-item:hover {
+      background: #f3f4f6;
+    }
+
+    .card-item.checked {
+      background: #ecfdf5;
+      border-color: #22c55e;
+    }
+
+    .card-item.checked .card-name {
+      color: #065f46;
+    }
+
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #d1d5db;
+      border-radius: 5px;
+      margin-right: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .checkbox.checked {
+      background: #22c55e;
+      border-color: #22c55e;
+    }
+
+    .checkbox::after {
+      content: '';
+      width: 10px;
+      height: 5px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .checkbox.checked::after {
+      opacity: 1;
+    }
+
+    .card-name {
+      font-size: 13px;
+      color: #374151;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .card-count {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-left: 8px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #9ca3af;
+      grid-column: 1 / -1;
+    }
+
+    .empty-state svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-state p {
+      font-size: 15px;
+    }
+
+    .card-list::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .card-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .card-list::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🃏 阿萨拉扑克牌收集</h1>
+      <div class="progress">已收集 <span id="collected-count">0</span> / <span id="total-count">54</span></div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" data-filter="all" onclick="switchTab('all')">全部</div>
+      <div class="tab" data-filter="collected" onclick="switchTab('collected')">已收集</div>
+      <div class="tab" data-filter="uncollected" onclick="switchTab('uncollected')">未收集</div>
+    </div>
+
+    <div class="card-list" id="card-list"></div>
+  </div>
+
+  <script>
+    const suits = ['♠️黑桃', '♥️红心', '♣️梅花', '♦️方块'];
+    const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+    let cards = [];
+    let collected = new Set();
+    let currentFilter = 'all';
+
+    function initCards() {
+      suits.forEach(suit => {
+        ranks.forEach(rank => {
+          cards.push(`${suit}${rank}`);
+        });
+      });
+      cards.push('大王');
+      cards.push('小王');
+    }
+
+    function loadCollected() {
+      const saved = localStorage.getItem('asala_collected');
+      if (saved) {
+        collected = new Set(JSON.parse(saved));
+      }
+    }
+
+    function saveCollected() {
+      localStorage.setItem('asala_collected', JSON.stringify([...collected]));
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const collectedCount = collected.size;
+      const totalCount = cards.length;
+      const percentage = Math.round((collectedCount / totalCount) * 100);
+
+      document.getElementById('collected-count').textContent = collectedCount;
+      document.getElementById('total-count').textContent = totalCount;
+      document.getElementById('progress-fill').style.width = `${percentage}%`;
+    }
+
+    function toggleCard(cardName) {
+      const checkbox = event.currentTarget;
+      const cardItem = checkbox.parentElement;
+
+      if (collected.has(cardName)) {
+        collected.delete(cardName);
+        checkbox.classList.remove('checked');
+        cardItem.classList.remove('checked');
+      } else {
+        collected.add(cardName);
+        checkbox.classList.add('checked');
+        cardItem.classList.add('checked');
+      }
+
+      saveCollected();
+      renderCards();
+    }
+
+    function renderCards() {
+      const container = document.getElementById('card-list');
+      container.innerHTML = '';
+
+      const filteredCards = cards.filter(card => {
+        if (currentFilter === 'collected') {
+          return collected.has(card);
+        } else if (currentFilter === 'uncollected') {
+          return !collected.has(card);
+        }
+        return true;
+      });
+
+      if (filteredCards.length === 0) {
+        container.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                        <p>${currentFilter === 'collected' ? '还没有收集任何牌' : '所有牌都已收集！'}</p>
+                    </div>
+                `;
+        return;
+      }
+
+      filteredCards.forEach(card => {
+        const isCollected = collected.has(card);
+        const item = document.createElement('div');
+        item.onclick = () => toggleCard(card)
+        item.className = `card-item ${isCollected ? 'checked' : ''}`;
+        item.innerHTML = `
+                    <div class="checkbox ${isCollected ? 'checked' : ''}" ></div>
+                    <span class="card-name">${card}</span>
+                `;
+        container.appendChild(item);
+      });
+    }
+
+    function switchTab(filter) {
+      currentFilter = filter;
+
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+
+      renderCards();
+    }
+
+    initCards();
+    loadCollected();
+    updateProgress();
+    renderCards();
+  </script>
+</body>
+
+</html>
