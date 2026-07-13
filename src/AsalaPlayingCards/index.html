@@ -207,6 +207,52 @@
       background: #d1d5db;
       border-radius: 2px;
     }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #eee;
+    }
+
+    .sort-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .sort-btn {
+      padding: 6px 12px;
+      font-size: 13px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #fff;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sort-btn.active {
+      background: #667eea;
+      color: #fff;
+      border-color: #667eea;
+    }
+
+    .select-all-btn {
+      padding: 6px 12px;
+      font-size: 13px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #fff;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .select-all-btn:hover {
+      background: #f3f4f6;
+    }
   </style>
 </head>
 
@@ -226,6 +272,14 @@
       <div class="tab" data-filter="uncollected" onclick="switchTab('uncollected')">未收集</div>
     </div>
 
+    <div class="toolbar">
+      <div class="sort-group">
+        <button class="sort-btn active" onclick="setSort('suit')">按花色排序</button>
+        <button class="sort-btn" onclick="setSort('rank')">按数字排序</button>
+      </div>
+      <button class="select-all-btn" onclick="selectAll()">全选</button>
+    </div>
+
     <div class="card-list" id="card-list"></div>
   </div>
 
@@ -235,6 +289,7 @@
     let cards = [];
     let collected = new Set();
     let currentFilter = 'all';
+    let currentSort = 'suit';
 
     function initCards() {
       suits.forEach(suit => {
@@ -290,13 +345,21 @@
       const container = document.getElementById('card-list');
       container.innerHTML = '';
 
-      const filteredCards = cards.filter(card => {
+      let filteredCards = cards.filter(card => {
         if (currentFilter === 'collected') {
           return collected.has(card);
         } else if (currentFilter === 'uncollected') {
           return !collected.has(card);
         }
         return true;
+      });
+
+      filteredCards.sort((a, b) => {
+        if (currentSort === 'suit') {
+          return compareBySuit(a, b);
+        } else {
+          return compareByRank(a, b);
+        }
       });
 
       if (filteredCards.length === 0) {
@@ -332,6 +395,89 @@
       });
       document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
 
+      renderCards();
+    }
+
+    function compareBySuit(a, b) {
+      const suitOrder = ['♠️黑桃', '♥️红心', '♣️梅花', '♦️方块'];
+      const jokerOrder = ['大王', '小王'];
+
+      const aIsJoker = jokerOrder.includes(a);
+      const bIsJoker = jokerOrder.includes(b);
+
+      if (aIsJoker && bIsJoker) {
+        return jokerOrder.indexOf(a) - jokerOrder.indexOf(b);
+      }
+      if (aIsJoker) return 1;
+      if (bIsJoker) return -1;
+
+      const aSuit = suitOrder.find(s => a.startsWith(s));
+      const bSuit = suitOrder.find(s => b.startsWith(s));
+
+      const suitCompare = suitOrder.indexOf(aSuit) - suitOrder.indexOf(bSuit);
+      if (suitCompare !== 0) return suitCompare;
+
+      const aRank = a.replace(aSuit, '');
+      const bRank = b.replace(bSuit, '');
+
+      return ranks.indexOf(aRank) - ranks.indexOf(bRank);
+    }
+
+    function compareByRank(a, b) {
+      const jokerOrder = ['大王', '小王'];
+
+      const aIsJoker = jokerOrder.includes(a);
+      const bIsJoker = jokerOrder.includes(b);
+
+      if (aIsJoker && bIsJoker) {
+        return jokerOrder.indexOf(a) - jokerOrder.indexOf(b);
+      }
+      if (aIsJoker) return 1;
+      if (bIsJoker) return -1;
+
+      const suitOrder = ['♠️黑桃', '♥️红心', '♣️梅花', '♦️方块'];
+      const aSuit = suitOrder.find(s => a.startsWith(s));
+      const bSuit = suitOrder.find(s => b.startsWith(s));
+
+      const aRank = a.replace(aSuit, '');
+      const bRank = b.replace(bSuit, '');
+
+      const rankCompare = ranks.indexOf(aRank) - ranks.indexOf(bRank);
+      if (rankCompare !== 0) return rankCompare;
+
+      return suitOrder.indexOf(aSuit) - suitOrder.indexOf(bSuit);
+    }
+
+    function setSort(sortType) {
+      currentSort = sortType;
+
+      document.querySelectorAll('.sort-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+
+      renderCards();
+    }
+
+    function selectAll() {
+      let filteredCards = cards.filter(card => {
+        if (currentFilter === 'collected') {
+          return collected.has(card);
+        } else if (currentFilter === 'uncollected') {
+          return !collected.has(card);
+        }
+        return true;
+      });
+
+      filteredCards.forEach(card => {
+        if (currentFilter === 'collected') {
+          collected.delete(card);
+        } else {
+          collected.add(card);
+        }
+      });
+
+      saveCollected();
       renderCards();
     }
 
