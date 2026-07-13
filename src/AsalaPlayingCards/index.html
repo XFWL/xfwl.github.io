@@ -62,6 +62,105 @@
       transition: width 0.3s ease;
     }
 
+    .realm-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #eee;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .realm-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .realm-tab {
+      display: flex;
+      align-items: center;
+      padding: 8px 14px;
+      background: #fff;
+      border: 1px solid #d1d5db;
+      border-radius: 20px;
+      font-size: 14px;
+      color: #666;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .realm-tab.active {
+      background: #667eea;
+      color: #fff;
+      border-color: #667eea;
+    }
+
+    .realm-tab .realm-name {
+      margin-right: 6px;
+    }
+
+    .realm-tab .close-btn {
+      font-size: 14px;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+
+    .realm-tab:hover .close-btn,
+    .realm-tab.active .close-btn {
+      opacity: 1;
+    }
+
+    .realm-tab.dragging {
+      opacity: 0.5;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .realm-tab.drag-over {
+      border-color: #667eea;
+      background: #f0f0ff;
+    }
+
+    .realm-tab.touch-dragging {
+      position: fixed;
+      z-index: 1000;
+      transform: scale(1.1);
+      opacity: 0.9;
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+    }
+
+    .rename-input {
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 500;
+      color: inherit;
+      outline: none;
+      width: 80px;
+      text-align: center;
+    }
+
+    .add-realm-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: #fff;
+      border: 1px dashed #d1d5db;
+      border-radius: 18px;
+      font-size: 18px;
+      color: #667eea;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .add-realm-btn:hover {
+      background: #f0f0ff;
+      border-color: #667eea;
+    }
+
     .tabs {
       display: flex;
       border-bottom: 1px solid #eee;
@@ -77,6 +176,10 @@
       cursor: pointer;
       transition: all 0.2s;
       position: relative;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .tab.active {
@@ -97,7 +200,7 @@
 
     .card-list {
       padding: 16px;
-      max-height: calc(100vh - 300px);
+      max-height: calc(100vh - 380px);
       overflow-y: auto;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -107,12 +210,14 @@
     .card-item {
       display: flex;
       align-items: center;
-      padding: 10px 12px;
+      padding: 12px 14px;
       background: #f9fafb;
       border-radius: 10px;
       transition: all 0.2s;
       border: 2px solid transparent;
       cursor: pointer;
+      min-height: 44px;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .card-item:hover {
@@ -253,6 +358,166 @@
     .select-all-btn:hover {
       background: #f3f4f6;
     }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      width: 80%;
+      max-width: 320px;
+    }
+
+    .modal h3 {
+      font-size: 18px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .modal-buttons button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-buttons .cancel-btn {
+      background: #f3f4f6;
+      color: #666;
+    }
+
+    .modal-buttons .confirm-btn {
+      background: #667eea;
+      color: #fff;
+    }
+
+    .wish-section {
+      padding: 16px;
+      background: #fffbeb;
+      border-bottom: 1px solid #fef3c7;
+    }
+
+    .wish-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .wish-header h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #92400e;
+    }
+
+    .wish-count {
+      font-size: 13px;
+      color: #d97706;
+      background: #fef3c7;
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+
+    .wish-list {
+      max-height: calc(100vh - 350px);
+      overflow-y: auto;
+    }
+
+    .wish-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: #fff;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      border: 1px solid #fde68a;
+      cursor: pointer;
+    }
+
+    .wish-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .wish-item:hover {
+      background: #fffde7;
+    }
+
+    .wish-card-name {
+      font-size: 13px;
+      color: #451a03;
+    }
+
+    .wish-card-count {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d97706;
+    }
+
+    .wish-detail {
+      display: none;
+      padding: 10px 12px;
+      background: #fff;
+      border-radius: 6px;
+      margin-top: 4px;
+      margin-bottom: 8px;
+      border: 1px dashed #fde68a;
+    }
+
+    .wish-detail.show {
+      display: block;
+    }
+
+    .wish-detail-item {
+      font-size: 12px;
+      color: #78350f;
+      padding: 4px 0;
+      border-bottom: 1px solid #fef3c7;
+    }
+
+    .wish-detail-item:last-child {
+      border-bottom: none;
+    }
+
+    .wish-empty {
+      text-align: center;
+      padding: 16px;
+      font-size: 13px;
+      color: #d97706;
+    }
   </style>
 </head>
 
@@ -266,21 +531,54 @@
       </div>
     </div>
 
-    <div class="tabs">
-      <div class="tab active" data-filter="all" onclick="switchTab('all')">全部</div>
-      <div class="tab" data-filter="collected" onclick="switchTab('collected')">已收集</div>
-      <div class="tab" data-filter="uncollected" onclick="switchTab('uncollected')">未收集</div>
-    </div>
-
-    <div class="toolbar">
-      <div class="sort-group">
-        <button class="sort-btn active" onclick="setSort('suit')">按花色排序</button>
-        <button class="sort-btn" onclick="setSort('rank')">按数字排序</button>
+    <div class="realm-tabs" id="realm-tabs">
+      <div class="realm-tab" data-realm="_wish">
+        <span class="realm-name">📋 期望</span>
+        <span class="close-btn" style="display:none;">×</span>
       </div>
-      <button class="select-all-btn" onclick="selectAll()">全选</button>
+      <div class="realm-tab active" data-realm="默认副本">
+        <span class="realm-name">默认副本</span>
+        <span class="close-btn" style="display:none;">×</span>
+      </div>
+      <div class="add-realm-btn" onclick="showAddRealmModal()">+</div>
     </div>
 
-    <div class="card-list" id="card-list"></div>
+    <div class="main-content" id="main-content">
+      <div class="tabs">
+        <div class="tab active" data-filter="all" onclick="switchTab('all')">全部</div>
+        <div class="tab" data-filter="collected" onclick="switchTab('collected')">已收集</div>
+        <div class="tab" data-filter="uncollected" onclick="switchTab('uncollected')">未收集</div>
+      </div>
+
+      <div class="toolbar">
+        <div class="sort-group">
+          <button class="sort-btn active" onclick="setSort('suit')">按花色排序</button>
+          <button class="sort-btn" onclick="setSort('rank')">按数字排序</button>
+        </div>
+        <button class="select-all-btn" onclick="selectAll()">全选</button>
+      </div>
+
+      <div class="card-list" id="card-list"></div>
+    </div>
+
+    <div class="wish-content" id="wish-content" style="display:none;">
+      <div class="wish-header">
+        <h3>📋 期望收集</h3>
+        <span class="wish-count" id="wish-count">0</span>
+      </div>
+      <div class="wish-list" id="wish-list"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-overlay" onclick="hideAddRealmModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <h3>创建新副本</h3>
+      <input type="text" id="realm-name-input" placeholder="输入副本名称" maxlength="10">
+      <div class="modal-buttons">
+        <button class="cancel-btn" onclick="hideAddRealmModal()">取消</button>
+        <button class="confirm-btn" onclick="addRealm()">确定</button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -290,6 +588,8 @@
     let collected = new Set();
     let currentFilter = 'all';
     let currentSort = 'suit';
+    let currentRealm = '默认副本';
+    let realms = ['默认副本'];
 
     function initCards() {
       suits.forEach(suit => {
@@ -301,16 +601,34 @@
       cards.push('小王');
     }
 
+    function loadRealms() {
+      const saved = localStorage.getItem('asala_realms');
+      if (saved) {
+        realms = JSON.parse(saved);
+        if (!realms.includes('默认副本')) {
+          realms.unshift('默认副本');
+        }
+      }
+      renderRealmTabs();
+    }
+
+    function saveRealms() {
+      localStorage.setItem('asala_realms', JSON.stringify(realms));
+    }
+
     function loadCollected() {
-      const saved = localStorage.getItem('asala_collected');
+      const saved = localStorage.getItem(`asala_collected_${currentRealm}`);
       if (saved) {
         collected = new Set(JSON.parse(saved));
+      } else {
+        collected = new Set();
       }
     }
 
     function saveCollected() {
-      localStorage.setItem('asala_collected', JSON.stringify([...collected]));
+      localStorage.setItem(`asala_collected_${currentRealm}`, JSON.stringify([...collected]));
       updateProgress();
+      renderWishList();
     }
 
     function updateProgress() {
@@ -398,6 +716,297 @@
       renderCards();
     }
 
+    function switchRealm(realm) {
+      currentRealm = realm;
+
+      document.querySelectorAll('.realm-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelector(`[data-realm="${realm}"]`).classList.add('active');
+
+      if (realm === '_wish') {
+        document.getElementById('main-content').style.display = 'none';
+        document.getElementById('wish-content').style.display = 'block';
+        renderWishList();
+      } else {
+        document.getElementById('main-content').style.display = 'block';
+        document.getElementById('wish-content').style.display = 'none';
+        loadCollected();
+        updateProgress();
+        renderCards();
+      }
+    }
+
+    function renderRealmTabs() {
+      const container = document.getElementById('realm-tabs');
+      container.innerHTML = '';
+
+      const wishTab = document.createElement('div');
+      wishTab.className = `realm-tab ${currentRealm === '_wish' ? 'active' : ''}`;
+      wishTab.dataset.realm = '_wish';
+      wishTab.innerHTML = `
+        <span class="realm-name">📋 期望</span>
+        <span class="close-btn" style="display:none;">×</span>
+      `;
+      wishTab.onclick = () => switchRealm('_wish');
+      container.appendChild(wishTab);
+
+      realms.forEach((realm, index) => {
+        const tab = document.createElement('div');
+        tab.className = `realm-tab ${realm === currentRealm ? 'active' : ''}`;
+        tab.dataset.realm = realm;
+        tab.draggable = true;
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'realm-name';
+        nameSpan.textContent = realm;
+
+        const closeBtn = document.createElement('span');
+        closeBtn.className = 'close-btn';
+        closeBtn.textContent = '×';
+        if (index === 0) closeBtn.style.display = 'none';
+        closeBtn.onclick = (e) => {
+          e.stopPropagation();
+          deleteRealm(realm);
+        };
+
+        tab.appendChild(nameSpan);
+        tab.appendChild(closeBtn);
+
+        tab.onclick = () => switchRealm(realm);
+        tab.ondblclick = () => startRename(realm, nameSpan);
+
+        tab.ondragstart = (e) => {
+          if (index === 0) {
+            e.preventDefault();
+            return;
+          }
+          e.dataTransfer.setData('text/plain', realm);
+          tab.classList.add('dragging');
+        };
+
+        tab.ondragend = () => {
+          tab.classList.remove('dragging');
+          document.querySelectorAll('.realm-tab').forEach(t => t.classList.remove('drag-over'));
+        };
+
+        tab.ondragover = (e) => {
+          e.preventDefault();
+          if (realm !== e.dataTransfer.getData('text/plain') && index > 0) {
+            tab.classList.add('drag-over');
+          }
+        };
+
+        tab.ondragleave = () => {
+          tab.classList.remove('drag-over');
+        };
+
+        tab.ondrop = (e) => {
+          e.preventDefault();
+          tab.classList.remove('drag-over');
+          const draggedRealm = e.dataTransfer.getData('text/plain');
+          if (draggedRealm && draggedRealm !== realm) {
+            moveRealm(draggedRealm, realm);
+          }
+        };
+
+        let touchStartTime = 0;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let isTouchDragging = false;
+        let longPressTimer = null;
+
+        tab.ontouchstart = (e) => {
+          if (index === 0) return;
+          touchStartTime = Date.now();
+          const touch = e.touches[0];
+          touchStartX = touch.clientX;
+          touchStartY = touch.clientY;
+          isTouchDragging = false;
+
+          longPressTimer = setTimeout(() => {
+            startRename(realm, nameSpan);
+            longPressTimer = null;
+          }, 600);
+        };
+
+        tab.ontouchmove = (e) => {
+          if (index === 0 || !longPressTimer) return;
+          const touch = e.touches[0];
+          const dx = Math.abs(touch.clientX - touchStartX);
+          const dy = Math.abs(touch.clientY - touchStartY);
+
+          if (dx > 10 || dy > 10) {
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+            isTouchDragging = true;
+
+            tab.classList.add('touch-dragging');
+            tab.style.left = touchStartX + 'px';
+            tab.style.top = touchStartY + 'px';
+            tab.style.width = tab.offsetWidth + 'px';
+          }
+        };
+
+        tab.ontouchend = (e) => {
+          if (index === 0) return;
+          clearTimeout(longPressTimer);
+          longPressTimer = null;
+
+          if (isTouchDragging) {
+            tab.classList.remove('touch-dragging');
+            tab.style.left = '';
+            tab.style.top = '';
+            tab.style.width = '';
+
+            const touch = e.changedTouches[0];
+            const target = document.elementFromPoint(touch.clientX, touch.clientY);
+            const targetTab = target ? target.closest('.realm-tab') : null;
+
+            if (targetTab && targetTab.dataset.realm && targetTab.dataset.realm !== realm && targetTab.dataset.realm !== '_wish') {
+              moveRealm(realm, targetTab.dataset.realm);
+            }
+          }
+        };
+
+        tab.ontouchcancel = () => {
+          if (index === 0) return;
+          clearTimeout(longPressTimer);
+          longPressTimer = null;
+
+          if (isTouchDragging) {
+            tab.classList.remove('touch-dragging');
+            tab.style.left = '';
+            tab.style.top = '';
+            tab.style.width = '';
+          }
+        };
+
+        container.appendChild(tab);
+      });
+
+      const addBtn = document.createElement('div');
+      addBtn.className = 'add-realm-btn';
+      addBtn.innerHTML = '+';
+      addBtn.onclick = showAddRealmModal;
+      container.appendChild(addBtn);
+    }
+
+    function moveRealm(fromRealm, toRealm) {
+      const fromIndex = realms.indexOf(fromRealm);
+      const toIndex = realms.indexOf(toRealm);
+
+      if (fromIndex > 0 && toIndex > 0 && fromIndex !== toIndex) {
+        realms.splice(fromIndex, 1);
+        realms.splice(toIndex, 0, fromRealm);
+        saveRealms();
+        renderRealmTabs();
+      }
+    }
+
+    function startRename(realm, nameSpan) {
+      const input = document.createElement('input');
+      input.className = 'rename-input';
+      input.value = realm;
+      input.maxLength = 10;
+
+      nameSpan.parentNode.replaceChild(input, nameSpan);
+      input.focus();
+      input.select();
+
+      input.onblur = () => finishRename(realm, input);
+      input.onkeydown = (e) => {
+        if (e.key === 'Enter') {
+          input.blur();
+        } else if (e.key === 'Escape') {
+          input.value = realm;
+          input.blur();
+        }
+      };
+    }
+
+    function finishRename(oldName, input) {
+      const newName = input.value.trim();
+
+      if (!newName || newName === oldName) {
+        input.parentNode.innerHTML = `
+          <span class="realm-name">${oldName}</span>
+          <span class="close-btn" ${realms.indexOf(oldName) === 0 ? 'style="display:none;"' : ''} onclick="event.stopPropagation(); deleteRealm('${oldName}')">×</span>
+        `;
+        return;
+      }
+
+      if (realms.includes(newName)) {
+        alert('该名称已存在');
+        input.parentNode.innerHTML = `
+          <span class="realm-name">${oldName}</span>
+          <span class="close-btn" ${realms.indexOf(oldName) === 0 ? 'style="display:none;"' : ''} onclick="event.stopPropagation(); deleteRealm('${oldName}')">×</span>
+        `;
+        return;
+      }
+
+      const index = realms.indexOf(oldName);
+      realms[index] = newName;
+
+      const oldData = localStorage.getItem(`asala_collected_${oldName}`);
+      if (oldData) {
+        localStorage.setItem(`asala_collected_${newName}`, oldData);
+        localStorage.removeItem(`asala_collected_${oldName}`);
+      }
+
+      if (currentRealm === oldName) {
+        currentRealm = newName;
+      }
+
+      saveRealms();
+      renderRealmTabs();
+    }
+
+    function showAddRealmModal() {
+      document.getElementById('realm-name-input').value = '';
+      document.getElementById('modal-overlay').classList.add('show');
+      document.getElementById('realm-name-input').focus();
+    }
+
+    function hideAddRealmModal() {
+      document.getElementById('modal-overlay').classList.remove('show');
+    }
+
+    function addRealm() {
+      const name = document.getElementById('realm-name-input').value.trim();
+      if (!name) return;
+      if (realms.includes(name)) {
+        alert('该副本名称已存在');
+        return;
+      }
+
+      realms.push(name);
+      saveRealms();
+      renderRealmTabs();
+      switchRealm(name);
+      hideAddRealmModal();
+    }
+
+    function deleteRealm(realm) {
+      if (!confirm(`确定要删除副本「${realm}」吗？所有收集进度将丢失。`)) return;
+
+      const index = realms.indexOf(realm);
+      if (index > 0) {
+        realms.splice(index, 1);
+        saveRealms();
+        localStorage.removeItem(`asala_collected_${realm}`);
+
+        if (currentRealm === realm) {
+          currentRealm = realms[0];
+        }
+
+        renderRealmTabs();
+        loadCollected();
+        updateProgress();
+        renderCards();
+      }
+    }
+
     function compareBySuit(a, b) {
       const suitOrder = ['♠️黑桃', '♥️红心', '♣️梅花', '♦️方块'];
       const jokerOrder = ['大王', '小王'];
@@ -479,12 +1088,91 @@
 
       saveCollected();
       renderCards();
+      renderWishList();
+    }
+
+    function getUncollectedStats() {
+      const stats = {};
+
+      cards.forEach(card => {
+        stats[card] = {
+          count: 0,
+          realms: []
+        };
+      });
+
+      realms.forEach(realm => {
+        const saved = localStorage.getItem(`asala_collected_${realm}`);
+        const realmCollected = saved ? new Set(JSON.parse(saved)) : new Set();
+
+        cards.forEach(card => {
+          if (!realmCollected.has(card)) {
+            stats[card].count++;
+            stats[card].realms.push(realm);
+          }
+        });
+      });
+
+      return stats;
+    }
+
+    function renderWishList() {
+      const container = document.getElementById('wish-list');
+      const stats = getUncollectedStats();
+
+      const wishCards = Object.entries(stats)
+        .filter(([, data]) => data.count > 0)
+        .sort((a, b) => {
+          const countCompare = b[1].count - a[1].count;
+          if (countCompare !== 0) return countCompare;
+          return compareBySuit(a[0], b[0]);
+        });
+
+      document.getElementById('wish-count').textContent = `${wishCards.length}张`;
+
+      if (wishCards.length === 0) {
+        container.innerHTML = '<div class="wish-empty">🎉 所有副本都已收集完毕！</div>';
+        return;
+      }
+
+      container.innerHTML = '';
+      let detailIdCounter = 0;
+
+      wishCards.forEach(([card, data]) => {
+        const detailId = `wish-detail-${detailIdCounter++}`;
+
+        const item = document.createElement('div');
+        item.className = 'wish-item';
+        item.onclick = () => toggleWishDetail(detailId);
+        item.innerHTML = `
+          <span class="wish-card-name">${card}</span>
+          <span class="wish-card-count">x${data.count}</span>
+        `;
+        container.appendChild(item);
+
+        const detail = document.createElement('div');
+        detail.id = detailId;
+        detail.className = 'wish-detail';
+        detail.innerHTML = data.realms.map(realm =>
+          `<div class="wish-detail-item">${realm} · ${card}</div>`
+        ).join('');
+        container.appendChild(detail);
+      });
+    }
+
+    function toggleWishDetail(detailId) {
+      const detail = document.getElementById(detailId);
+      if (detail) {
+        detail.classList.toggle('show');
+      }
     }
 
     initCards();
+    loadRealms();
     loadCollected();
     updateProgress();
     renderCards();
+    renderWishList();
   </script>
 </body>
 
