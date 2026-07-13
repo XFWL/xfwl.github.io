@@ -502,14 +502,34 @@
     }
 
     .wish-detail-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-size: 12px;
       color: #78350f;
-      padding: 4px 0;
+      padding: 6px 0;
       border-bottom: 1px solid #fef3c7;
     }
 
     .wish-detail-item:last-child {
       border-bottom: none;
+    }
+
+    .wish-collect-btn {
+      padding: 4px 10px;
+      font-size: 11px;
+      border: 1px solid #f59e0b;
+      border-radius: 12px;
+      background: #fffbeb;
+      color: #d97706;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .wish-collect-btn:hover {
+      background: #f59e0b;
+      color: #fff;
     }
 
     .wish-empty {
@@ -1122,11 +1142,7 @@
 
       const wishCards = Object.entries(stats)
         .filter(([, data]) => data.count > 0)
-        .sort((a, b) => {
-          const countCompare = b[1].count - a[1].count;
-          if (countCompare !== 0) return countCompare;
-          return compareBySuit(a[0], b[0]);
-        });
+        .sort((a, b) => compareBySuit(a[0], b[0]));
 
       document.getElementById('wish-count').textContent = `${wishCards.length}张`;
 
@@ -1153,9 +1169,28 @@
         const detail = document.createElement('div');
         detail.id = detailId;
         detail.className = 'wish-detail';
-        detail.innerHTML = data.realms.map(realm =>
-          `<div class="wish-detail-item">${realm} · ${card}</div>`
-        ).join('');
+        detail.onclick = (e) => e.stopPropagation();
+
+        data.realms.forEach(realm => {
+          const detailItem = document.createElement('div');
+          detailItem.className = 'wish-detail-item';
+
+          const label = document.createElement('span');
+          label.textContent = `${realm} · ${card}`;
+
+          const btn = document.createElement('button');
+          btn.className = 'wish-collect-btn';
+          btn.textContent = '标记收集';
+          btn.onclick = (e) => {
+            e.stopPropagation();
+            markCollectedInRealm(realm, card);
+          };
+
+          detailItem.appendChild(label);
+          detailItem.appendChild(btn);
+          detail.appendChild(detailItem);
+        });
+
         container.appendChild(detail);
       });
     }
@@ -1165,6 +1200,21 @@
       if (detail) {
         detail.classList.toggle('show');
       }
+    }
+
+    function markCollectedInRealm(realm, card) {
+      const saved = localStorage.getItem(`asala_collected_${realm}`);
+      const realmCollected = saved ? new Set(JSON.parse(saved)) : new Set();
+      realmCollected.add(card);
+      localStorage.setItem(`asala_collected_${realm}`, JSON.stringify([...realmCollected]));
+
+      if (realm === currentRealm) {
+        collected.add(card);
+        updateProgress();
+        renderCards();
+      }
+
+      renderWishList();
     }
 
     initCards();
