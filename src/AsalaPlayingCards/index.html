@@ -572,8 +572,8 @@
 
       <div class="toolbar">
         <div class="sort-group">
-          <button class="sort-btn active" onclick="setSort('suit')">按花色排序</button>
-          <button class="sort-btn" onclick="setSort('rank')">按数字排序</button>
+          <button class="sort-btn active" data-sort="suit" onclick="setSort('suit')">按花色排序</button>
+          <button class="sort-btn" data-sort="rank" onclick="setSort('rank')">按数字排序</button>
         </div>
         <button class="select-all-btn" onclick="selectAll()">全选</button>
       </div>
@@ -585,6 +585,12 @@
       <div class="wish-header">
         <h3>📋 期望收集</h3>
         <span class="wish-count" id="wish-count">0</span>
+      </div>
+      <div class="toolbar">
+        <div class="sort-group">
+          <button class="sort-btn active" data-sort="suit" onclick="setSort('suit')">按花色排序</button>
+          <button class="sort-btn" data-sort="rank" onclick="setSort('rank')">按数字排序</button>
+        </div>
       </div>
       <div class="wish-list" id="wish-list"></div>
     </div>
@@ -1081,11 +1087,11 @@
       currentSort = sortType;
 
       document.querySelectorAll('.sort-btn').forEach(btn => {
-        btn.classList.remove('active');
+        btn.classList.toggle('active', btn.dataset.sort === sortType);
       });
-      event.currentTarget.classList.add('active');
 
       renderCards();
+      renderWishList();
     }
 
     function selectAll() {
@@ -1142,7 +1148,7 @@
 
       const wishCards = Object.entries(stats)
         .filter(([, data]) => data.count > 0)
-        .sort((a, b) => compareBySuit(a[0], b[0]));
+        .sort((a, b) => currentSort === 'rank' ? compareByRank(a[0], b[0]) : compareBySuit(a[0], b[0]));
 
       document.getElementById('wish-count').textContent = `${wishCards.length}张`;
 
